@@ -29,7 +29,6 @@ namespace BetterWarehouses
     [HarmonyPatch]
     public static class Patch
     {
-        private static bool _warehouseInfoCreated = false;
         private static GameObject _warehouseInfo = null;
         private static GameObject _warehouse100PercentItems = null;
         private static GameObject _warehouseGreenItems = null;
@@ -49,6 +48,7 @@ namespace BetterWarehouses
         
         private static void CreateWarehouseStockUI()
         {
+            MelonLogger.Msg("CreateWarehouseStockUI");
             var conditionGameObject = UIManager.Get().PartInspector.condition.gameObject;
             var inspectorTransformParent = UIManager.Get().PartInspector.gameObject.transform.Find("Inspector");
             _warehouseInfo = GameObject.Instantiate(conditionGameObject, inspectorTransformParent);
@@ -96,8 +96,6 @@ namespace BetterWarehouses
             _warehouseOrangeTextComponent =
                 _warehouseOrangeItems.transform.Find("ConditionPercentage").GetComponent<Text>();
             _warehouseRedTextComponent = _warehouseRedItems.transform.Find("ConditionPercentage").GetComponent<Text>();
-
-            _warehouseInfoCreated = true;
         }
 
         private static BaseItemWithData SearchWarehouse()
@@ -127,7 +125,7 @@ namespace BetterWarehouses
             if (currentScene.name != "garage") return; // skip if we're not in the garage
             if (isWindowVisible) return; // skip if inventory or warehouses etc are open
 
-            if (_warehouseInfoCreated != true) CreateWarehouseStockUI();
+            if (_warehouseTextComponent == null) CreateWarehouseStockUI();
 
             var item = SearchWarehouse();
             _warehouseTextComponent.text = $"Warehouse Total: {item.Count}";
