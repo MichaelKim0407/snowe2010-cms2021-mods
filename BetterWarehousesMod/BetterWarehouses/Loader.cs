@@ -168,7 +168,7 @@ namespace BetterWarehouses
                     case var _ when condition >= .50:
                         baseItemWithData.NumYellowQuality++;
                         break;
-                    case var _ when condition > 0:
+                    case var _ when condition > .15:
                         baseItemWithData.NumOrangeQuality++;
                         break;
                     default:
